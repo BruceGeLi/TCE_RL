@@ -18,10 +18,5 @@ Current advancements in reinforcement learning (RL) have predominantly focused o
 ## Citation
 todo
 
-<div align="center">
-  <br><br>
-    <a href='https://github.com/BruceGeLi/Temporally_Correlated_Exploration_RL'><img src='./web_assets/CodeOnGithub.png' width="300px"></a>
-</div>
-
 ## Installation
 todo
