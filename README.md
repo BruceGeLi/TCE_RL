@@ -22,3 +22,6 @@ todo
   <br><br>
     <a href='https://github.com/BruceGeLi/Temporally_Correlated_Exploration_RL'><img src='./web_assets/CodeOnGithub.png' width="300px"></a>
 </div>
+
+## Installation
+todo
