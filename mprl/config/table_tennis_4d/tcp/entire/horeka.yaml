@@ -1,0 +1,39 @@
+---
+name: "SLURM"
+partition: "accelerated"
+job-name: "table_tennis_4d_tcp"
+num_parallel_jobs: 120
+ntasks: 1
+cpus-per-task: 152
+mem-per-cpu: 2048
+time: 1000
+gpus_per_rep: 1
+scheduler: horeka
+sbatch_args:
+  gres: "gpu:4"
+---
+name: table_tennis_4d_tcp
+import_path: "./shared.yaml"
+import_exp: "table_tennis_4d_tcp"
+
+# cw2 config
+repetitions: 4            # Number of repetitions, each with different random seed, 4 for test, 20 for paper
+reps_per_job: 4
+reps_in_parallel: 4
+iterations: &iterations 12000
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  agent:
+    args:
+      total_iterations: *iterations
+  sampler:
+    args:
+      num_env_train: 38
+      num_env_test: 38
+      episodes_per_train_env: 2
+      episodes_per_test_env: 2
+  projection:
+    args:
+      total_train_steps: *iterations

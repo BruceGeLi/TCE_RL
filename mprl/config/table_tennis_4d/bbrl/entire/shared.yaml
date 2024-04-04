@@ -1,0 +1,129 @@
+# Global config
+exp_name: &exp_name "table_tennis_4d_bbrl"
+exp_path: &exp_path "../../mprl_exp_result"
+sub_exp_name: &sub_exp_name "BBRL, gymnasium, fix mp rnd wrapper"
+act_func_hidden: &act_func_hidden tanh
+act_func_last: &act_func_last null
+dtype: &dtype "float32"
+device: &device "cpu"
+seed: auto
+
+# cw2 config
+name: *exp_name
+path: *exp_path
+
+# wandb
+wandb:
+  project: *exp_name
+  group: *sub_exp_name
+  entity: WANDB_USERNAME
+  log_interval: &log_interval 25
+  log_model: true
+  model_name: model
+
+# experiment parameters
+params:
+  agent:
+    type: BlackBoxAgent
+    args:
+      lr_policy: 3e-4
+      lr_critic: 3e-4
+      wd_policy: 1e-5
+      wd_critic: 1e-5
+      clip_critic: 0.0
+      clip_grad_norm: 0.0
+      entropy_penalty_coef: 0.0
+      discount_factor: &discount_factor 1
+      epochs_policy: 100
+      epochs_critic: 100
+      num_minibatchs: 1
+      norm_advantages: true
+      clip_advantages: 0.0
+      set_variance: true
+      balance_check: *log_interval
+      evaluation_interval: *log_interval
+      dtype: *dtype
+      device: *device
+
+  mp: &mp
+    type: prodmp
+    args:
+      num_dof: 7
+      tau: 0.75
+      delay: 0.3
+      alpha_phase: 3
+      num_basis: 3
+      basis_bandwidth_factor: 3
+      num_basis_outside: 0
+      alpha: 25
+      learn_tau: false
+      learn_delay: false
+      disable_goal: false
+      relative_goal: true
+      auto_scale_basis: true
+      weights_scale: 0.7
+      goal_scale: 0.1
+      dt: 0.008
+
+  policy:
+    type: BlackBoxPolicy
+    args:
+      mean_net_args:
+        avg_neuron: 256
+        num_hidden: 1
+        shape: 0.0
+      variance_net_args:
+        std_only: false
+        contextual: false
+      init_method: orthogonal
+      out_layer_gain: 0.01
+      min_std: 1e-5
+      act_func_hidden: *act_func_hidden
+      act_func_last: *act_func_last
+      dtype: *dtype
+      device: *device
+
+  critic:
+    type: ValueFunction
+    args:
+      hidden:
+        avg_neuron: 256
+        num_hidden: 1
+        shape: 0.0
+      init_method: orthogonal
+      out_layer_gain: 1
+      act_func_hidden: *act_func_hidden
+      act_func_last: *act_func_last
+      dtype: *dtype
+      device: *device
+
+  projection:
+    type: KLProjectionLayer
+    args:
+      proj_type: kl
+      mean_bound: 0.005
+      cov_bound: 0.001
+      trust_region_coeff: 25
+      scale_prec: true
+      entropy_schedule: false
+      target_entropy: 0.0
+      temperature: 0.5
+      entropy_eq: false
+      entropy_first: false
+      do_regression: false
+      dtype: *dtype
+      device: *device
+
+  sampler:
+    type: BlackBoxSampler
+    args:
+      env_id: "fancy_ProDMP/TableTennisRndInit-v0"
+      dtype: *dtype
+      device: *device
+      seed: auto
+      task_specified_metrics: [ "hit_ball",
+                                "ball_returned_success",
+                                "land_dist_error",
+                                "is_success",
+                                "num_steps" ]
+      mp: *mp

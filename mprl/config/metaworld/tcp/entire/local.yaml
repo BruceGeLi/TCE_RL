@@ -1,0 +1,25 @@
+# cw2 config
+name: metaworld_tcp_entire
+import_path: "./shared.yaml"
+import_exp: "metaworld_tcp_entire"
+
+repetitions: 1
+reps_per_job: 1
+reps_in_parallel: 1
+iterations: &iterations 2500
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  agent:
+    args:
+      total_iterations: *iterations
+  sampler:
+    args:
+      num_env_train: 4
+      num_env_test: 4
+      episodes_per_train_env: 1
+      episodes_per_test_env: 1
+  projection:
+    args:
+      total_train_steps: *iterations

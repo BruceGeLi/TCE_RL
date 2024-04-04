@@ -1,0 +1,40 @@
+---
+name: "SLURM"
+partition: "cpuonly"
+job-name: "table_tennis_4d_bbrl"
+num_parallel_jobs: 0
+cpus-per-task: 152
+time: 450
+cpus_per_rep: 38
+scheduler: cpu_distribute
+ntasks: 1
+
+---
+name: table_tennis_4d_bbrl
+import_path: "./shared.yaml"
+import_exp: "table_tennis_4d_bbrl"
+
+# cw2 config
+repetitions: 4            # Number of repetitions, each with different random seed, 4 for test, 20 for paper
+reps_per_job: 4
+reps_in_parallel: 4
+iterations: &iterations 12000
+num_checkpoints: 3
+
+# Hardware specific parameters
+params:
+  sampler:
+    args:
+      num_env_train: 38
+      num_env_test: 38
+      episodes_per_train_env: 2
+      episodes_per_test_env: 2
+  projection:
+    args:
+      total_train_steps: *iterations
+
+#grid:
+#  projection:
+#    args:
+#      mean_bound: [0.001, 0.002, 0.005]
+#      cov_bound: [0.000025, 0.00005]

@@ -1,0 +1,25 @@
+# cw2 config
+name: hopper_jump_tcp
+import_path: "./shared.yaml"
+import_exp: "hopper_jump_tcp"
+
+repetitions: 1
+reps_per_job: 1
+reps_in_parallel: 1
+iterations: &iterations 2500
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  agent:
+    args:
+      evaluation_interval: 3
+  sampler:
+    args:
+      num_env_train: 8
+      num_env_test: 8
+      episodes_per_train_env: 5
+      episodes_per_test_env: 1
+  projection:
+    args:
+      total_train_steps: *iterations

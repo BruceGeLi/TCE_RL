@@ -1,0 +1,105 @@
+---
+name: "SLURM"
+partition: "accelerated"
+job-name: "metaworld_tcp_entire"
+num_parallel_jobs: 120
+ntasks: 1
+cpus-per-task: 152
+mem-per-cpu: 2048
+time: 600
+gpus_per_rep: 1
+scheduler: horeka
+sbatch_args:
+  gres: "gpu:4"
+---
+name: metaworld_tcp_entire
+import_path: "./shared.yaml"
+import_exp: "metaworld_tcp_entire"
+
+# cw2 config
+repetitions: 4       # Number of repetitions, each with different random seed, 4 for test, 20 for paper
+reps_per_job: 4
+reps_in_parallel: 4
+iterations: &iterations 7600
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  agent:
+    args:
+      total_iterations: *iterations
+  sampler:
+    args:
+      num_env_train: 16
+      num_env_test: 16
+      episodes_per_train_env: 1
+      episodes_per_test_env: 1
+  projection:
+    args:
+      total_train_steps: *iterations
+
+grid:
+  sampler:
+    args:
+      env_id:
+        [ "metaworld_ProDMP_TCE/assembly-v2",
+          "metaworld_ProDMP_TCE/hammer-v2",
+          "metaworld_ProDMP_TCE/button-press-v2",
+          "metaworld_ProDMP_TCE/disassemble-v2",
+          "metaworld_ProDMP_TCE/door-close-v2",
+          "metaworld_ProDMP_TCE/drawer-close-v2",
+          "metaworld_ProDMP_TCE/pick-place-v2",
+          "metaworld_ProDMP_TCE/soccer-v2" ]
+
+#        [
+#          "metaworld_ProDMP_TCE/assembly-v2",
+#          "metaworld_ProDMP_TCE/pick-out-of-hole-v2",
+#          "metaworld_ProDMP_TCE/plate-slide-v2",
+#          "metaworld_ProDMP_TCE/plate-slide-back-v2",
+#          "metaworld_ProDMP_TCE/plate-slide-side-v2",
+#          "metaworld_ProDMP_TCE/plate-slide-back-side-v2",
+#          "metaworld_ProDMP_TCE/bin-picking-v2",
+#          "metaworld_ProDMP_TCE/hammer-v2",
+#          "metaworld_ProDMP_TCE/sweep-into-v2",
+#          "metaworld_ProDMP_TCE/box-close-v2",
+#          "metaworld_ProDMP_TCE/button-press-v2",
+#          "metaworld_ProDMP_TCE/button-press-wall-v2",
+#          "metaworld_ProDMP_TCE/button-press-topdown-v2",
+#          "metaworld_ProDMP_TCE/button-press-topdown-wall-v2",
+#          "metaworld_ProDMP_TCE/coffee-button-v2",
+#          "metaworld_ProDMP_TCE/coffee-pull-v2",
+#          "metaworld_ProDMP_TCE/coffee-push-v2",
+#          "metaworld_ProDMP_TCE/dial-turn-v2",
+#          "metaworld_ProDMP_TCE/disassemble-v2",
+#          "metaworld_ProDMP_TCE/door-close-v2",
+#          "metaworld_ProDMP_TCE/door-lock-v2",
+#          "metaworld_ProDMP_TCE/door-open-v2",
+#          "metaworld_ProDMP_TCE/door-unlock-v2",
+#          "metaworld_ProDMP_TCE/hand-insert-v2",
+#          "metaworld_ProDMP_TCE/drawer-close-v2",
+#          "metaworld_ProDMP_TCE/drawer-open-v2",
+#          "metaworld_ProDMP_TCE/faucet-open-v2",
+#          "metaworld_ProDMP_TCE/faucet-close-v2",
+#          "metaworld_ProDMP_TCE/handle-press-side-v2",
+#          "metaworld_ProDMP_TCE/handle-press-v2",
+#          "metaworld_ProDMP_TCE/handle-pull-side-v2",
+#          "metaworld_ProDMP_TCE/handle-pull-v2",
+#          "metaworld_ProDMP_TCE/lever-pull-v2",
+#          "metaworld_ProDMP_TCE/peg-insert-side-v2",
+#          "metaworld_ProDMP_TCE/pick-place-wall-v2",
+#          "metaworld_ProDMP_TCE/reach-v2",
+#          "metaworld_ProDMP_TCE/push-back-v2",
+#          "metaworld_ProDMP_TCE/push-v2",
+#          "metaworld_ProDMP_TCE/pick-place-v2",
+#          "metaworld_ProDMP_TCE/peg-unplug-side-v2",
+#          "metaworld_ProDMP_TCE/soccer-v2",
+#          "metaworld_ProDMP_TCE/stick-push-v2",
+#          "metaworld_ProDMP_TCE/stick-pull-v2",
+#          "metaworld_ProDMP_TCE/push-wall-v2",
+#          "metaworld_ProDMP_TCE/reach-wall-v2",
+#          "metaworld_ProDMP_TCE/shelf-place-v2",
+#          "metaworld_ProDMP_TCE/sweep-v2",
+#          "metaworld_ProDMP_TCE/window-open-v2",
+#          "metaworld_ProDMP_TCE/window-close-v2",
+#          "metaworld_ProDMP_TCE/basketball-v2"
+#        ]

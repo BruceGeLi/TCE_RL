@@ -1,0 +1,41 @@
+---
+name: "SLURM"
+partition: "cpuonly"
+job-name: "box_random_bbrl_entire"
+num_parallel_jobs: 0
+cpus-per-task: 152
+time: 600
+cpus_per_rep: 38
+scheduler: cpu_distribute
+ntasks: 1
+
+---
+name: box_random_bbrl_entire
+import_path: "./shared.yaml"
+import_exp: "box_random_bbrl_entire"
+
+# cw2 config
+repetitions: 4      # Number of repetitions, each with different random seed, 4 for test, 20 for paper
+reps_per_job: 4
+reps_in_parallel: 4
+iterations: &iterations 7500
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  sampler:
+    args:
+      num_env_train: 38
+      num_env_test: 38
+      episodes_per_train_env: 2
+      episodes_per_test_env: 4
+  projection:
+    args:
+      total_train_steps: *iterations
+
+list:
+  sampler:
+    args:
+      env_id: [ "fancy_ProDMP/BoxPushingRandomInitDense-v0",
+                "fancy_ProDMP/BoxPushingRandomInitTemporalSparse-v0" ]
+      episodes_per_train_env: [4, 2]

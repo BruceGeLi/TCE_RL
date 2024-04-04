@@ -1,0 +1,98 @@
+---
+name: "SLURM"
+partition: "cpuonly"
+job-name: "metaworld_bbrl_entire"
+num_parallel_jobs: 0
+cpus-per-task: 76
+time: 250
+cpus_per_rep: 19
+scheduler: cpu_distribute
+ntasks: 1
+
+---
+name: metaworld_bbrl_entire
+import_path: "./shared.yaml"
+import_exp: "metaworld_bbrl_entire"
+
+# cw2 config
+repetitions: 4     # Number of repetitions, each with different random seed, 4 for test, 20 for paper
+reps_per_job: 4
+reps_in_parallel: 4
+iterations: &iterations 7500
+num_checkpoints: 1
+
+# Hardware specific parameters
+params:
+  sampler:
+    args:
+      num_env_train: 16
+      num_env_test: 16
+      episodes_per_train_env: 1
+      episodes_per_test_env: 1
+  projection:
+    args:
+      total_train_steps: *iterations
+
+grid:
+  sampler:
+    args:
+      env_id:
+        [ "metaworld_ProDMP/assembly-v2",
+          "metaworld_ProDMP/hammer-v2",
+          "metaworld_ProDMP/button-press-v2",
+          "metaworld_ProDMP/disassemble-v2",
+          "metaworld_ProDMP/door-close-v2",
+          "metaworld_ProDMP/drawer-close-v2",
+          "metaworld_ProDMP/pick-place-v2",
+          "metaworld_ProDMP/soccer-v2" ]
+
+#        [ "metaworld_ProDMP/assembly-v2",
+#          "metaworld_ProDMP/pick-out-of-hole-v2",
+#          "metaworld_ProDMP/plate-slide-v2",
+#          "metaworld_ProDMP/plate-slide-back-v2",
+#          "metaworld_ProDMP/plate-slide-side-v2",
+#          "metaworld_ProDMP/plate-slide-back-side-v2",
+#          "metaworld_ProDMP/bin-picking-v2",
+#          "metaworld_ProDMP/hammer-v2",
+#          "metaworld_ProDMP/sweep-into-v2",
+#          "metaworld_ProDMP/box-close-v2",
+#          "metaworld_ProDMP/button-press-v2",
+#          "metaworld_ProDMP/button-press-wall-v2",
+#          "metaworld_ProDMP/button-press-topdown-v2",
+#          "metaworld_ProDMP/button-press-topdown-wall-v2",
+#          "metaworld_ProDMP/coffee-button-v2",
+#          "metaworld_ProDMP/coffee-pull-v2",
+#          "metaworld_ProDMP/coffee-push-v2",
+#          "metaworld_ProDMP/dial-turn-v2",
+#          "metaworld_ProDMP/disassemble-v2",
+#          "metaworld_ProDMP/door-close-v2",
+#          "metaworld_ProDMP/door-lock-v2",
+#          "metaworld_ProDMP/door-open-v2",
+#          "metaworld_ProDMP/door-unlock-v2",
+#          "metaworld_ProDMP/hand-insert-v2",
+#          "metaworld_ProDMP/drawer-close-v2",
+#          "metaworld_ProDMP/drawer-open-v2",
+#          "metaworld_ProDMP/faucet-open-v2",
+#          "metaworld_ProDMP/faucet-close-v2",
+#          "metaworld_ProDMP/handle-press-side-v2",
+#          "metaworld_ProDMP/handle-press-v2",
+#          "metaworld_ProDMP/handle-pull-side-v2",
+#          "metaworld_ProDMP/handle-pull-v2",
+#          "metaworld_ProDMP/lever-pull-v2",
+#          "metaworld_ProDMP/peg-insert-side-v2",
+#          "metaworld_ProDMP/pick-place-wall-v2",
+#          "metaworld_ProDMP/reach-v2",
+#          "metaworld_ProDMP/push-back-v2",
+#          "metaworld_ProDMP/push-v2",
+#          "metaworld_ProDMP/pick-place-v2",
+#          "metaworld_ProDMP/peg-unplug-side-v2",
+#          "metaworld_ProDMP/soccer-v2",
+#          "metaworld_ProDMP/stick-push-v2",
+#          "metaworld_ProDMP/stick-pull-v2",
+#          "metaworld_ProDMP/push-wall-v2",
+#          "metaworld_ProDMP/reach-wall-v2",
+#          "metaworld_ProDMP/shelf-place-v2",
+#          "metaworld_ProDMP/sweep-v2",
+#          "metaworld_ProDMP/window-open-v2",
+#          "metaworld_ProDMP/window-close-v2",
+#          "metaworld_ProDMP/basketball-v2" ]
