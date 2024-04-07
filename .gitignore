@@ -147,3 +147,9 @@ tmp/
 **/wandb/
 **/result
 **/MUJOCO_LOG.TXT
+
+# All subcomponents of the project
+fancy_gymnasium/
+Git_Repos_Tracker/
+Metaworld/
+trust-region-layers/

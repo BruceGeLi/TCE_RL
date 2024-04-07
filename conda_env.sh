@@ -10,7 +10,7 @@ conda create --name $ENV_NAME python=$PYTHON_VERSION -y
 
 # Activate the newly created environment
 echo "Activating the $ENV_NAME environment"
-source activate $ENV_NAME
+conda activate $ENV_NAME
 
 # Install mamba release to boost installation and resolve dependencies
 conda install -c conda-forge mamba=1.4.2 -y
