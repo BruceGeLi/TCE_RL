@@ -255,6 +255,7 @@ class RLExperiment:
         test_config["params"]["sampler"]["args"]["num_env_test"] = 1
         if not keep_training:
             test_config["params"]["sampler"]["args"]["num_env_train"] = 1
+            test_config["params"]["sampler"]["args"]["render_test_env"] = True
 
 
 def make_mdp_reward(task_id: str, step_rewards, step_infos,
@@ -304,6 +305,8 @@ def make_mdp_reward(task_id: str, step_rewards, step_infos,
     # Sum up the reward after the event
     reward_after_event = step_rewards * event_index
     reward_after_event = reward_after_event.sum(axis=-1)
+    # Fixme, hopper
+    # reward_after_event = reward_after_event[..., -1]
 
     # Check if the event happened
     event_happened = event_index_first > 0

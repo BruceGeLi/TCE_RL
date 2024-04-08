@@ -45,6 +45,9 @@ class BlackBoxSampler(AbstractSampler):
         # Logging the task specified metrics
         self.task_specified_metrics = kwargs.get("task_specified_metrics", None)
 
+        # Render the test env
+        self.render_test_env = kwargs.get("render_test_env", False)
+
         # Get training and testing environments
         self.train_envs = self.get_env(env_type="training")
         self.test_envs = self.get_env(env_type="testing")
@@ -62,6 +65,7 @@ class BlackBoxSampler(AbstractSampler):
         Returns:
             environments
         """
+        render = False
 
         if env_type == "training":
             num_env = self.num_env_train
@@ -69,6 +73,7 @@ class BlackBoxSampler(AbstractSampler):
         elif env_type == "testing":
             num_env = self.num_env_test
             seed = self.seed + 10000
+            render = self.render_test_env
         elif env_type == "debugging":
             num_env = 1
             seed = self.seed + 20000
@@ -77,7 +82,7 @@ class BlackBoxSampler(AbstractSampler):
 
         # Make envs
         envs = make_bb_vec_env(env_id=self.env_id, num_env=num_env,
-                               seed=seed, render=False, mp_args=self.mp_args)
+                               seed=seed, render=render, mp_args=self.mp_args)
 
         # Map env to cpu cores to avoid cpu conflicts in HPC
         # util.assign_env_to_cpu(num_env, envs, self.cpu_cores)
@@ -108,17 +113,18 @@ class BlackBoxSampler(AbstractSampler):
         """
         # Training or evaluation
         if training:
-            assert deterministic is False and render is False
+            assert deterministic is False
             envs = self.train_envs
             episode_init_state = envs.reset()
             num_env = self.num_env_train
             ep_per_env = self.episodes_per_train_env
         else:
             envs = self.test_envs
-            episode_init_state = envs.reset()
             num_env = self.num_env_test
+            episode_init_state = envs.reset()
             if render and num_env == 1:
                 envs.render()
+
             ep_per_env = self.episodes_per_test_env
 
         # Determine the dimensions
