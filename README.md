@@ -49,7 +49,7 @@ bash conda_env.sh
 This will create a conda environment **tce** with all necessary packages installed. 
 You can also take a look of the bash file and do the job step by step. The entire installation procedure will take about 15 min.
 
-## Trouble Shooting
+## Trouble Shooting for Installation
 Again, the installation is very tricky, some known issues are listed below:
 1. Cannot install or load the cppprojection package
     - This is a known issue, you can try to install the package manually by running the following command:
@@ -183,6 +183,15 @@ You will receive some information if the git repos version mismatch (logged vs. 
 
 We use the Clusterwork2 Package to manage the config files of the experiments. 
 Please refer [cw2](https://github.com/ALRhub/cw2) for more details of the config hierarchy and options.
+
+## Trouble Shooting for Running Experiments
+1. Wandb Error
+   
+   Please ensure that you have a wandb account and have logged in.
+
+2. Complains from the Git_Repos_Tracker
+   
+   This tools helps to track the versions of the used git repositories and enforce git commits before running experiments. If you want to disable it, simply modify the util_git.py file. Alternatively you can use debug mode to run experiments. 
 
 
 ## Experiment Results in WandB
