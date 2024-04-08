@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Initialize Conda for this script
+eval "$(conda shell.bash hook)"
+
 # Define environment name and Python version
 ENV_NAME=tce
 PYTHON_VERSION=3.8
@@ -11,6 +14,16 @@ conda create --name $ENV_NAME python=$PYTHON_VERSION -y
 # Activate the newly created environment
 echo "Activating the $ENV_NAME environment"
 conda activate $ENV_NAME
+
+# Verify if the correct conda environment is activated
+echo
+if [[ "$CONDA_DEFAULT_ENV" != "$ENV_NAME" ]]; then
+    echo "$CONDA_DEFAULT_ENV"
+    echo Failed to activate conda environment.
+    exit 1
+else
+    echo Successfully activated conda environment.
+fi
 
 # Install mamba release to boost installation and resolve dependencies
 conda install -c conda-forge mamba=1.4.2 -y
